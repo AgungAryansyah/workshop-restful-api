@@ -8,6 +8,7 @@ import (
 
 type IRestaurantRepository interface {
 	CreateRestaurant(restaurant entity.Restaurant) error
+	GetRestaurants() ([]entity.Restaurant, error)
 }
 
 type RestaurantRepository struct {
