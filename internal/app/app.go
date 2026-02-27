@@ -1,8 +1,12 @@
 package app
 
-import "workshop-restful-api-backend/pkg/postgres"
+import (
+	"workshop-restful-api-backend/internal/repository"
+	"workshop-restful-api-backend/pkg/postgres"
+)
 
 func Run() {
-	_ = postgres.StartPostgres()
+	db := postgres.StartPostgres()
 
+	_ = repository.NewRepository(db)
 }
