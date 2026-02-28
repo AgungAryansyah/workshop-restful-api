@@ -11,6 +11,11 @@ type CreateRestaurant struct {
 	Location string `json:"location"`
 }
 
+type EditRestaurant struct {
+	Name     string `json:"name"`
+	Location string `json:"location"`
+}
+
 type RestaurantResponse struct {
 	Id       uuid.UUID `json:"id"`
 	Name     string    `json:"name"`

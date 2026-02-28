@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"workshop-restful-api-backend/internal/entity"
+	"workshop-restful-api-backend/internal/model"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -12,6 +13,7 @@ type IRestaurantRepository interface {
 	CreateRestaurant(ctx context.Context, trestaurant entity.Restaurant) error
 	GetRestaurants(ctx context.Context) ([]entity.Restaurant, error)
 	DeleteRestaurants(ctx context.Context, id uuid.UUID) error
+	EditRestaurant(ctx context.Context, id uuid.UUID, edit model.EditRestaurant) error
 }
 
 type RestaurantRepository struct {
@@ -42,6 +44,22 @@ func (r *RestaurantRepository) GetRestaurants(ctx context.Context) ([]entity.Res
 
 func (r *RestaurantRepository) DeleteRestaurants(ctx context.Context, id uuid.UUID) error {
 	rows, err := gorm.G[entity.Restaurant](r.db).Where("id = ?", id).Delete(ctx)
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
+}
+
+func (r *RestaurantRepository) EditRestaurant(ctx context.Context, id uuid.UUID, edit model.EditRestaurant) error {
+	rows, err := gorm.G[entity.Restaurant](r.db).
+		Where("id = ?", id).
+		Updates(ctx, entity.Restaurant{Name: edit.Name, Location: edit.Location})
+
 	if err != nil {
 		return err
 	}
