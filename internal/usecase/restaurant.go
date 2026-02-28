@@ -13,6 +13,7 @@ import (
 type IRestaurantUsecase interface {
 	CreateRestaurant(ctx context.Context, createRestaurant model.CreateRestaurant) (*model.RestaurantResponse, error)
 	GetRestaurants(ctx context.Context) ([]model.RestaurantResponse, error)
+	DeleteRestaurants(ctx context.Context, id uuid.UUID) error
 }
 
 type RestaurantUsecase struct {
@@ -48,4 +49,8 @@ func (r *RestaurantUsecase) GetRestaurants(ctx context.Context) ([]model.Restaur
 
 	responses := model.ToRestaurantResponses(restaurants)
 	return responses, nil
+}
+
+func (r *RestaurantUsecase) DeleteRestaurants(ctx context.Context, id uuid.UUID) error {
+	return r.restaurantRepository.DeleteRestaurants(ctx, id)
 }

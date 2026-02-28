@@ -4,12 +4,14 @@ import (
 	"context"
 	"workshop-restful-api-backend/internal/entity"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type IRestaurantRepository interface {
 	CreateRestaurant(ctx context.Context, trestaurant entity.Restaurant) error
 	GetRestaurants(ctx context.Context) ([]entity.Restaurant, error)
+	DeleteRestaurants(ctx context.Context, id uuid.UUID) error
 }
 
 type RestaurantRepository struct {
@@ -36,4 +38,13 @@ func (r *RestaurantRepository) GetRestaurants(ctx context.Context) ([]entity.Res
 	}
 
 	return restaurants, nil
+}
+
+func (r *RestaurantRepository) DeleteRestaurants(ctx context.Context, id uuid.UUID) error {
+	_, err := gorm.G[entity.Restaurant](r.db).Where("id = ?", id).Delete(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

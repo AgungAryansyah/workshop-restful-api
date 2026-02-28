@@ -5,6 +5,7 @@ import (
 	"workshop-restful-api-backend/internal/model"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func (r *V1) GetRestaurant(c *gin.Context) {
@@ -37,4 +38,22 @@ func (r *V1) CreateRestaurant(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, restaurant)
+}
+
+func (r *V1) DeleteRestaurant(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	ctx := c.Request.Context()
+
+	err = r.usecase.RestaurantUsecase.DeleteRestaurants(ctx, id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
 }
