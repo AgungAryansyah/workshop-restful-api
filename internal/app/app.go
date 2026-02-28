@@ -14,9 +14,9 @@ func Run() {
 	db := postgres.StartPostgres()
 	app := httpserver.Start()
 
-	repository := repository.NewRepository(db)
-	usecase := usecase.NewUsecase(repository)
-	v1 := rest.NewV1(usecase)
+	repo := repository.NewRepository(db)
+	uc := usecase.NewUsecase(repo)
+	v1 := rest.NewV1(uc)
 
 	rest.NewRouter(app, v1)
 
