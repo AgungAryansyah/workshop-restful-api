@@ -12,7 +12,7 @@ import (
 
 type IRestaurantUsecase interface {
 	CreateRestaurant(ctx context.Context, createRestaurant model.CreateRestaurant) (*model.RestaurantResponse, error)
-	GetRestaurants(ctx context.Context) ([]entity.Restaurant, error)
+	GetRestaurants(ctx context.Context) ([]model.RestaurantResponse, error)
 }
 
 type RestaurantUsecase struct {
@@ -37,10 +37,15 @@ func (r *RestaurantUsecase) CreateRestaurant(ctx context.Context, createRestaura
 	}
 
 	response := model.ToRestourantResponse(restaurant)
-
 	return &response, nil
 }
 
-func (r *RestaurantUsecase) GetRestaurants(ctx context.Context) ([]entity.Restaurant, error) {
-	return r.restaurantRepository.GetRestaurants(ctx)
+func (r *RestaurantUsecase) GetRestaurants(ctx context.Context) ([]model.RestaurantResponse, error) {
+	restaurants, err := r.restaurantRepository.GetRestaurants(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	responses := model.ToRestaurantResponses(restaurants)
+	return responses, nil
 }

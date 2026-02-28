@@ -24,3 +24,12 @@ func ToRestourantResponse(restaurant entity.Restaurant) RestaurantResponse {
 		Location: restaurant.Location,
 	}
 }
+
+func ToRestaurantResponses(restaurants []entity.Restaurant) []RestaurantResponse {
+	var responses []RestaurantResponse
+	for _, restaurant := range restaurants {
+		responses = append(responses, ToRestourantResponse(restaurant))
+	}
+
+	return responses
+}
