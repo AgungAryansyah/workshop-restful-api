@@ -10,6 +10,7 @@ func NewRouter(app *gin.Engine, controller *Controller) {
 		restaurants := api.Group("/restaurants")
 		{
 			restaurants.GET("/", controller.GetRestaurant)
+			restaurants.POST("/", controller.CreateRestaurant)
 		}
 	}
 
