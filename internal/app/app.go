@@ -15,7 +15,7 @@ func Run() {
 
 	repository := repository.NewRepository(db)
 	usecase := usecase.NewUsecase(repository)
-	controller := rest.NewController(usecase)
+	v1 := rest.NewV1(usecase)
 
-	rest.NewRouter(app, controller)
+	rest.NewRouter(app, v1)
 }
