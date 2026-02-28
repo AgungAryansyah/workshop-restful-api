@@ -15,6 +15,4 @@ func NewRouter(app *gin.Engine, v1 *V1) {
 			restaurants.PATCH("/:id", v1.EditRestaurant)
 		}
 	}
-
-	app.Run()
 }
