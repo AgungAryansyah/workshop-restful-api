@@ -30,10 +30,6 @@ func (r *ItemRepository) GetRestaurantItems(ctx context.Context, restaurantID uu
 		return nil, err
 	}
 
-	if len(Item) == 0 {
-		return nil, gorm.ErrRecordNotFound
-	}
-
 	return Item, nil
 }
 
