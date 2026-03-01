@@ -14,5 +14,11 @@ func NewRouter(app *gin.Engine, v1 *V1) {
 			restaurants.DELETE("/:id", v1.DeleteRestaurant)
 			restaurants.PATCH("/:id", v1.EditRestaurant)
 		}
+
+		items := api.Group("/items")
+		{
+			items.GET("/:id", v1.GetRestaurantItems)
+			items.POST("/", v1.CreateItem)
+		}
 	}
 }
