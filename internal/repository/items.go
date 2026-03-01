@@ -11,6 +11,7 @@ import (
 type IItemRepository interface {
 	GetRestaurantItems(ctx context.Context, restaurantID uuid.UUID) ([]entity.Item, error)
 	CreateItem(ctx context.Context, item entity.Item) error
+	DeleteItem(ctx context.Context, id uuid.UUID) error
 }
 
 type ItemRepository struct {
@@ -38,6 +39,19 @@ func (r *ItemRepository) CreateItem(ctx context.Context, item entity.Item) error
 	err := gorm.G[entity.Item](r.db).Create(ctx, &item)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (r *ItemRepository) DeleteItem(ctx context.Context, id uuid.UUID) error {
+	rows, err := gorm.G[entity.Item](r.db).Where("id = ?", id).Delete(ctx)
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return gorm.ErrRecordNotFound
 	}
 
 	return nil

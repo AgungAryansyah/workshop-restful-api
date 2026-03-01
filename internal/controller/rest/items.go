@@ -1,11 +1,13 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 	"workshop-restful-api-backend/internal/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func (r *V1) GetRestaurantItems(c *gin.Context) {
@@ -41,4 +43,25 @@ func (r *V1) CreateItem(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, item)
+}
+
+func (r *V1) DeleteItem(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	ctx := c.Request.Context()
+	err = r.usecase.ItemUsecase.DeleteItem(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
 }
