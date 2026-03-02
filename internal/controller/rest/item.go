@@ -3,6 +3,7 @@ package rest
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"workshop-restful-api-backend/internal/model"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +18,26 @@ func (r *V1) GetRestaurantItems(c *gin.Context) {
 		return
 	}
 
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	limit, err := strconv.Atoi(c.Query("limit"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	pagination := model.Pagination{
+		Page:  page,
+		Limit: limit,
+	}
+	pagination.Check()
+
 	ctx := c.Request.Context()
-	items, err := r.usecase.ItemUsecase.GetRestaurantItems(ctx, id)
+	items, err := r.usecase.ItemUsecase.GetRestaurantItems(ctx, pagination, id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
