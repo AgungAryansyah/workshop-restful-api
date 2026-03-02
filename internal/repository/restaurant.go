@@ -34,7 +34,10 @@ func (r *RestaurantRepository) CreateRestaurant(ctx context.Context, restaurant 
 }
 
 func (r *RestaurantRepository) GetRestaurants(ctx context.Context, pagination model.Pagination) ([]entity.Restaurant, error) {
-	restaurants, err := gorm.G[entity.Restaurant](r.db).Limit(pagination.Limit).Offset(pagination.Page).Find(ctx)
+	restaurants, err := gorm.G[entity.Restaurant](r.db).
+		Limit(pagination.Limit).
+		Offset(pagination.Offset()).
+		Find(ctx)
 	if err != nil {
 		return nil, err
 	}

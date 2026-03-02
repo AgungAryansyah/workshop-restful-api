@@ -19,3 +19,7 @@ func (p *Pagination) Check() {
 		p.Limit = 10
 	}
 }
+
+func (p *Pagination) Offset() int {
+	return (p.Page - 1) * p.Limit
+}
