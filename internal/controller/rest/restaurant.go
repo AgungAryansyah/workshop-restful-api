@@ -12,13 +12,13 @@ import (
 )
 
 func (r *V1) GetRestaurants(c *gin.Context) {
-	page, err := strconv.Atoi(c.Query("page"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	limit, err := strconv.Atoi(c.Query("limit"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
